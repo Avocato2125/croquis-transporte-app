@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Croquis Transporte - Selección de Planta</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <h1>Croquis Transporte</h1>
+    </header>
+
+    <main class="main-content">
+        <section class="plant-selection-section fade-in">
+            <h2 class="section-title">Rutas para...</h2>
+            <p class="section-description">Selecciona la planta para ver sus rutas de transporte.</p>
+
+            <div class="plant-card-grid">
+                <div class="plant-card fade-in" data-plant="abc-technologies">
+                    <img src="/img/ABC.jpg" alt="Logo ABC-TECHNOLOGIES"> <h3>ABC-TECHNOLOGIES</h3>
+                </div>
+
+                <div class="plant-card fade-in" data-plant="leoch-battery">
+                    <img src="/img/LEOCH.jpg" alt="Logo LEOCH-BATTERY"> <h3>LEOCH-BATTERY</h3>
+                </div>
+
+                <div class="plant-card fade-in" data-plant="phillips">
+                    <img src="/img/PHILLIPS.jpg" alt="Logo PHILLIPS"> <h3>PHILLIPS</h3>
+                </div>
+
+                <div class="plant-card fade-in" data-plant="gerber">
+                    <img src="/img/GERBER.jpg" alt="Logo GERBER"> <h3>GERBER</h3>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 Tu Empresa. Todos los derechos reservados.</p>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modalPlantTitle">Acceso a Rutas</h2>
+            <p id="modalPlantDescription">Por favor, ingresa tu usuario y contraseña para <strong id="modalPlantName"></strong>:</p>
+            <div class="input-group">
+                <label for="usernameInput">Usuario:</label>
+                <input type="text" id="usernameInput" placeholder="Ingresa tu usuario">
+            </div>
+            <div class="input-group">
+                <label for="passwordInput">Contraseña:</label>
+                <input type="password" id="passwordInput" placeholder="Ingresa tu contraseña">
+            </div>
+            <p id="errorMessage" class="error-message"></p>
+            <div class="modal-buttons">
+                <button id="loginButton" class="button primary-button">Iniciar Sesión</button>
+                <button id="cancelButton" class="button secondary-button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

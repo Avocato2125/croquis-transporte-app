@@ -1,0 +1,610 @@
+/* Estilos generales */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #f4f7f6, #e0e5eb);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden; /* Asegura que no haya scroll horizontal no deseado */
+    min-width: 320px; /* Previene el desborde en pantallas muy pequeñas */
+}
+
+/* Animación del degradado de fondo */
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.header {
+    background-color: #2c3e50;
+    color: #ffffff;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    position: relative;
+    overflow: hidden;
+    animation: slideInFromTop 1s ease-out forwards;
+    display: flex; /* Usar flexbox para alinear contenido */
+    flex-direction: column; /* Apilar elementos verticalmente */
+    align-items: center; /* Centrar horizontalmente */
+    justify-content: center;
+}
+
+.header h1 {
+    margin-top: 0;
+    font-size: 2.8rem;
+    letter-spacing: 1.5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 0.5rem; /* Ajuste para espacio con el p */
+}
+
+.header p {
+    font-size: 1.1rem;
+    margin-top: 0.5rem; /* Ajuste de margen */
+    display: flex; /* Para alinear el botón si existe */
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Espacio entre el texto y el botón */
+    flex-wrap: wrap; /* Permite que los elementos dentro de p se envuelvan */
+}
+
+.back-to-home {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 2px solid #ffffff;
+    padding-bottom: 2px;
+    transition: border-bottom 0.3s ease;
+}
+
+.back-to-home:hover {
+    border-bottom: 2px solid #3498db;
+}
+
+/* Estilos para el botón de Cerrar Sesión (añadido por JS) */
+#logoutButton {
+    background-color: #e74c3c; /* Rojo */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    margin-left: 10px; /* Ajuste de margen */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#logoutButton:hover {
+    background-color: #c0392b;
+    transform: translateY(-1px);
+}
+
+
+.main-content {
+    max-width: 1200px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+}
+
+/* Estilos para la sección de selección de plantas (en index.html) */
+.plant-selection-section {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.section-title {
+    color: #0d47a1;
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 0.8rem;
+    display: inline-block;
+}
+
+.section-description {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2.5rem;
+}
+
+.plant-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+.plant-card {
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.plant-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+    background-color: #f0f0f0;
+}
+
+.plant-card img {
+    max-width: 220px;
+    height: auto;
+    max-height: 220px; /* Limita la altura para evitar desbordes si la imagen es vertical */
+    object-fit: contain; /* Asegura que la imagen quepa dentro de las dimensiones sin cortarse */
+    margin-bottom: 1rem;
+    border-radius: 50%; /* Bordes completamente redondeados (circulares) */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border: 3px solid #f0f0f0;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease;
+}
+
+.plant-card:hover img {
+    transform: scale(1.05);
+    border-color: #3498db;
+}
+
+.plant-card h3 {
+    color: #3498db;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+/* Estilos para las secciones de plantas dentro de las páginas de rutas */
+.plant-section {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    overflow: hidden; /* Importante para que el contenido dentro no desborde */
+}
+
+.plant-title {
+    color: #0d47a1;
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #3498db;
+    position: relative;
+    letter-spacing: 0.5px;
+}
+
+.plant-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -3px;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: #2ecc71;
+    border-radius: 2px;
+}
+
+/* Grid para organizar los croquis dentro de cada sección de planta */
+.routes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+}
+
+.map-container {
+    background-color: #f8f8f8;
+    border-radius: 12px;
+    padding: 1.8rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden; /* Asegura que el iframe no desborde el contenedor */
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.map-container:hover {
+    transform: translateY(-8px) scale(1.005);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto de luz al pasar el ratón */
+.map-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.map-container:hover::before {
+    opacity: 1;
+}
+
+.map-container h3 {
+    color: #3498db;
+    margin-top: 0;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 0.6rem;
+    margin-bottom: 1.2rem;
+    font-size: 1.6rem;
+    position: relative;
+    text-align: center; /* Centrar el título del mapa */
+}
+
+.map-container h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background-color: #3498db;
+    transition: width 0.3s ease-out;
+}
+
+.map-container:hover h3::after {
+    width: 100%;
+}
+
+.map-container iframe {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    display: block;
+    margin-bottom: 1.2rem;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+    width: 100%; /* Asegura que el iframe ocupe todo el ancho disponible */
+    max-width: 100%; /* Asegura que el iframe no desborde su contenedor */
+    box-sizing: border-box; /* Incluye padding y border en el width */
+    height: 480px; /* Mantener la altura fija para consistencia, o ajustarla a tu gusto */
+}
+
+.map-description {
+    font-size: 1rem;
+    color: #555;
+    text-align: center;
+}
+
+.footer {
+    background-color: #34495e;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-top: 3.5rem;
+    font-size: 0.95rem;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Animaciones de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animación para el encabezado */
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Estilos para la ventana Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    backdrop-filter: blur(5px);
+}
+
+.modal.show {
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    position: relative;
+    text-align: center;
+    animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-content .close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.modal-content .close-button:hover,
+.modal-content .close-button:focus {
+    color: #333;
+}
+
+#modalPlantTitle {
+    color: #0d47a1;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+#modalPlantDescription {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.input-group input[type="text"],
+.input-group input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 12px 10px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input[type="text"]:focus,
+.input-group input[type="password"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+    outline: none;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    height: 18px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.primary-button {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.primary-button:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-button {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.secondary-button:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Media Queries para Responsive Design (ajustadas para la modal y las imágenes de planta) */
+@media (max-width: 992px) {
+    .plant-card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .plant-selection-section {
+        padding: 2rem;
+    }
+    .section-title {
+        font-size: 2.2rem;
+    }
+    .plant-card img {
+        max-width: 180px;
+    }
+    .routes-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .plant-section {
+        padding: 1.5rem;
+    }
+    .plant-title {
+        font-size: 1.9rem;
+        margin-bottom: 2rem;
+    }
+    .map-container h3 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2.2rem;
+    }
+    .main-content {
+        padding: 0 1rem;
+        margin: 2rem auto;
+        gap: 2.5rem;
+    }
+    .plant-selection-section {
+        padding: 1.5rem;
+    }
+    .section-title {
+        font-size: 1.9rem;
+    }
+    .plant-card-grid {
+        gap: 20px;
+    }
+    .plant-card img {
+        max-width: 140px;
+    }
+    .plant-card h3 {
+        font-size: 1.3rem;
+    }
+    .plant-section {
+        padding: 1.2rem;
+    }
+    .plant-title {
+        font-size: 1.7rem;
+        margin-bottom: 1.8rem;
+    }
+    .map-container iframe {
+        height: 350px;
+    }
+    .map-container h3 {
+        font-size: 1.3rem;
+    }
+    /* Modal en móviles */
+    .modal-content {
+        padding: 20px;
+        width: 95%;
+    }
+    #modalPlantTitle {
+        font-size: 1.6rem;
+    }
+    .button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 1.8rem 0.5rem;
+    }
+    .header h1 {
+        font-size: 1.9rem;
+    }
+    .main-content {
+        margin: 1.5rem auto;
+        gap: 1.8rem;
+    }
+    .plant-selection-section {
+        padding: 1rem;
+    }
+    .section-title {
+        font-size: 1.7rem;
+    }
+    .plant-card-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .plant-card img {
+        max-width: 100px;
+    }
+    .plant-card h3 {
+        font-size: 1.2rem;
+    }
+    .plant-section {
+        padding: 1rem;
+    }
+    .plant-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .map-container iframe {
+        height: 280px;
+    }
+    .map-container h3 {
+        font-size: 1.2rem;
+    }
+    .map-description {
+        font-size: 0.9rem;
+    }
+}
