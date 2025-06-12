@@ -1,10 +1,8 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     console.log('¡Script.js cargado y ejecutándose!'); // Mensaje de depuración
 
     const plantCards = document.querySelectorAll('.plant-card');
 
-    // Referencias a los elementos de la modal
     const loginModal = document.getElementById('loginModal');
     const closeButton = document.querySelector('.close-button');
     const modalPlantTitle = document.getElementById('modalPlantTitle');
@@ -15,9 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.getElementById('loginButton');
     const cancelButton = document.getElementById('cancelButton');
 
-    let currentPlantId = ''; // Variable para guardar la planta actual seleccionada
+    let currentPlantId = '';
 
-    // Función para mostrar la modal
     function showModal(plantId, plantName) {
         currentPlantId = plantId;
         modalPlantTitle.textContent = `Acceso a Rutas de ${plantName}`;
@@ -30,13 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
         usernameInput.focus();
     }
 
-    // Función para ocultar la modal
     function hideModal() {
         loginModal.classList.remove('show');
         setTimeout(() => loginModal.style.display = 'none', 300);
     }
 
-    // Event listener para las tarjetas de plantas
     plantCards.forEach(card => {
         card.addEventListener('click', () => {
             console.log('Clic en tarjeta de planta:', card.dataset.plant);
@@ -46,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Event listeners para los botones de la modal
     if (closeButton) closeButton.addEventListener('click', hideModal);
     if (cancelButton) cancelButton.addEventListener('click', hideModal);
     if (loginButton) {
@@ -62,7 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('http://localhost:3000/api/login', {
+                // URL DE TU APP DESPLEGADA
+                const response = await fetch('https://croquis-rutas-online.onrender.com/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -78,7 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('username', data.username);
 
                     hideModal();
-                    window.location.href = `http://localhost:3000/routes/${currentPlantId}`;
+                    // URL DE TU APP DESPLEGADA
+                    window.location.href = `https://croquis-rutas-online.onrender.com/routes/${currentPlantId}`;
 
                 } else {
                     errorMessage.textContent = data.message || 'Error de inicio de sesión. Credenciales inválidas.';
@@ -91,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Permitir iniciar sesión con Enter en los campos de usuario/contraseña
     if (usernameInput) {
         usernameInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -110,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Si el usuario hace clic fuera de la modal, cerrarla
     if (loginModal) {
         window.addEventListener('click', (event) => {
             if (event.target === loginModal) {
@@ -119,35 +113,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =========================================================================
-    // Lógica de Autenticación para Páginas de Rutas (ABC-routes.html, etc.)
-    // Esta lógica se ejecuta cuando el navegador carga una de esas páginas.
-    // =========================================================================
     const checkAuthAndLoadContent = async () => {
         const currentPath = window.location.pathname;
         let requestedPlantId = null;
 
-        // Extraer el plantId de la URL actual
-        // Esto cubre tanto /routes/abc-technologies como /abc-routes.html
         const match = currentPath.match(/\/routes\/(.+?)(?:-routes\.html|\/?)$/);
         if (match && match[1]) {
             requestedPlantId = match[1];
+        } else {
+            const directMatch = currentPath.match(/\/([a-z0-9-]+)-routes\.html$/);
+            if (directMatch && directMatch[1]) {
+                 requestedPlantId = directMatch[1];
+            }
         }
 
         if (!requestedPlantId) {
-            return; // No es una página de rutas específica, no hacer nada aquí.
+            return;
         }
 
         const token = localStorage.getItem('jwtToken');
 
         if (!token) {
             alert('Sesión expirada o no autenticado. Por favor, inicia sesión.');
-            window.location.href = 'http://localhost:3000';
+            window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
             return;
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/userinfo', {
+            // URL DE TU APP DESPLEGADA
+            const response = await fetch('https://croquis-rutas-online.onrender.com/api/userinfo', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -161,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('jwtToken');
                 localStorage.removeItem('userPlantId');
                 localStorage.removeItem('username');
-                window.location.href = 'http://localhost:3000';
+                window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
                 return;
             }
 
@@ -170,13 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!isAdmin && requestedPlantId !== userPlantId) {
                 alert('No tienes permiso para ver las rutas de esta planta.');
-                window.location.href = 'http://localhost:3000';
+                window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
                 return;
             }
 
             console.log(`Acceso concedido a rutas de ${requestedPlantId} para ${userData.username}`);
 
-            // Opcional: mostrar un botón de logout
             const header = document.querySelector('.header');
             if (header && !document.getElementById('logoutButton')) {
                 const logoutBtn = document.createElement('button');
@@ -188,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.removeItem('jwtToken');
                     localStorage.removeItem('userPlantId');
                     localStorage.removeItem('username');
-                    window.location.href = 'http://localhost:3000';
+                    window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
                 };
                 const headerP = header.querySelector('p');
                 if (headerP) {
@@ -207,14 +200,13 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('jwtToken');
             localStorage.removeItem('userPlantId');
             localStorage.removeItem('username');
-            window.location.href = 'http://localhost:3000';
+            window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
         }
     };
 
     checkAuthAndLoadContent();
 
 
-    // Código para el efecto de luz del ratón (mantenerlo si lo usas en las páginas de rutas)
     const mapContainers = document.querySelectorAll('.map-container');
     if (mapContainers.length > 0) {
         mapContainers.forEach(container => {
