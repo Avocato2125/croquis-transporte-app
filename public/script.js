@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('¡Script.js cargado y ejecutándose!'); // Mensaje de depuración
+    console.log('¡Script.js cargado y ejecutándose!');
 
     const plantCards = document.querySelectorAll('.plant-card');
 
@@ -56,8 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                // URL DE TU APP DESPLEGADA
-                const response = await fetch('https://croquis-rutas-online.onrender.com/api/login', {
+                // LLAMADA AL BACKEND: URL DE TU APP DESPLEGADA EN RAILWAY
+                const response = await fetch('https://rutas-tecsa.up.railway.app/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('username', data.username);
 
                     hideModal();
-                    // URL DE TU APP DESPLEGADA
-                    window.location.href = `https://croquis-rutas-online.onrender.com/routes/${currentPlantId}`;
+                    // REDIRECCIÓN A LA RUTA PROTEGIDA: URL DE TU APP DESPLEGADA EN RAILWAY
+                    window.location.href = `https://rutas-tecsa.up.railway.app/routes/${currentPlantId}`;
 
                 } else {
                     errorMessage.textContent = data.message || 'Error de inicio de sesión. Credenciales inválidas.';
@@ -113,6 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // =========================================================================
+    // Lógica de Autenticación para Páginas de Rutas (ABC-routes.html, etc.)
+    // =========================================================================
     const checkAuthAndLoadContent = async () => {
         const currentPath = window.location.pathname;
         let requestedPlantId = null;
@@ -135,13 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!token) {
             alert('Sesión expirada o no autenticado. Por favor, inicia sesión.');
-            window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
+            window.location.href = 'https://rutas-tecsa.up.railway.app'; // URL DE TU APP DESPLEGADA EN RAILWAY
             return;
         }
 
         try {
-            // URL DE TU APP DESPLEGADA
-            const response = await fetch('https://croquis-rutas-online.onrender.com/api/userinfo', {
+            // LLAMADA AL BACKEND: URL DE TU APP DESPLEGADA EN RAILWAY
+            const response = await fetch('https://rutas-tecsa.up.railway.app/api/userinfo', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -155,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('jwtToken');
                 localStorage.removeItem('userPlantId');
                 localStorage.removeItem('username');
-                window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
+                window.location.href = 'https://rutas-tecsa.up.railway.app'; // URL DE TU APP DESPLEGADA EN RAILWAY
                 return;
             }
 
@@ -164,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!isAdmin && requestedPlantId !== userPlantId) {
                 alert('No tienes permiso para ver las rutas de esta planta.');
-                window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
+                window.location.href = 'https://rutas-tecsa.up.railway.app'; // URL DE TU APP DESPLEGADA EN RAILWAY
                 return;
             }
 
@@ -181,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.removeItem('jwtToken');
                     localStorage.removeItem('userPlantId');
                     localStorage.removeItem('username');
-                    window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
+                    window.location.href = 'https://rutas-tecsa.up.railway.app'; // URL DE TU APP DESPLEGADA EN RAILWAY
                 };
                 const headerP = header.querySelector('p');
                 if (headerP) {
@@ -200,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('jwtToken');
             localStorage.removeItem('userPlantId');
             localStorage.removeItem('username');
-            window.location.href = 'https://croquis-rutas-online.onrender.com'; // URL DE TU APP DESPLEGADA
+            window.location.href = 'https://rutas-tecsa.up.railway.app'; // URL DE TU APP DESPLEGADA EN RAILWAY
         }
     };
 

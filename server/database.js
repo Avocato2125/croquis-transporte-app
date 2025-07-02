@@ -2,7 +2,10 @@ const Database = require('better-sqlite3');
 const bcrypt = require('bcrypt');
 const path = require('path');
 
-const dbPath = path.join(__dirname, 'users.db');
+// Ruta al archivo de la base de datos (¡CORREGIDA para Railway/contenedores!)
+// Usa /tmp para asegurar que tienes permisos de escritura
+const dbPath = path.join('/tmp', 'users.db'); 
+
 const db = new Database(dbPath);
 
 console.log('Base de datos conectada en:', dbPath);
