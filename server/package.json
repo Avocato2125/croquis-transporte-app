@@ -1,10 +1,10 @@
 {
-  "name": "croquis-transporte-app", // Puedes cambiar el nombre principal de tu proyecto
+  "name": "croquis-transporte-app", 
   "version": "1.0.0",
   "description": "",
-  "main": "server/app.js", // ¡CAMBIO AQUÍ! apuntas a tu main app dentro de server/
+  "main": "server/app.js", 
   "scripts": {
-    "start": "node server/app.js", // ¡CAMBIO AQUÍ! llamas a app.js dentro de server/
+    "start": "node server/app.js", 
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -21,6 +21,6 @@
     "jsonwebtoken": "^9.0.2"
   },
   "engines": {          
-    "node": "20.x"      
+    "node": "18.x"      
   }
 }
