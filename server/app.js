@@ -16,16 +16,16 @@ const JWT_SECRET = process.env.JWT_SECRET; // Tu secreto JWT del archivo .env
 // Middleware PRINCIPAL Y ORDEN CRÍTICO
 // =========================================================================
 
-// 0. RUTA EXPLÍCITA PARA LA RAÍZ: AHORA USA LA RUTA ABSOLUTA DIRECTAMENTE DENTRO DEL CONTENEDOR
-//    Esto es CRÍTICO para que Express encuentre index.html en Railway cuando el Root Directory es '.'
+// 0. RUTA EXPLÍCITA PARA LA RAÍZ: AHORA USA UN MÉTODO DE RESOLUCIÓN DE RUTAS MÁS ROBUSTO
 app.get('/', (req, res) => {
-    res.sendFile('/app/public/index.html'); 
+    // ¡CAMBIO CLAVE! Usar path.resolve(process.cwd(), ...) para la ruta absoluta
+    // process.cwd() devuelve el directorio de trabajo actual (debería ser /app en Railway)
+    res.sendFile(path.resolve(process.cwd(), 'public', 'index.html')); 
 });
 
 // 1. **Luego:** Servir archivos estáticos del frontend.
-//    ¡CAMBIO CLAVE! AHORA USA LA RUTA ABSOLUTA DIRECTA EN EL CONTENEDOR
-//    Esto asegura que style.css, script.js, img/, y las otras páginas de rutas HTML se sirvan.
-app.use(express.static('/app/public')); 
+//    ¡CAMBIO CLAVE! Usar path.resolve(process.cwd(), ...) para la ruta absoluta
+app.use(express.static(path.resolve(process.cwd(), 'public'))); 
 
 // 2. **Luego:** Parsers para el cuerpo de las solicitudes (JSON).
 app.use(express.json());
@@ -35,8 +35,7 @@ app.use(cookieParser());
 
 // 4. **Luego:** Configuración manual de CORS.
 app.use((req, res, next) => {
-    // URL PÚBLICA REAL DE TU APP EN RAILWAY
-    res.header('Access-Control-Allow-Origin', 'https://rutas-tecsa.up.railway.app');
+    res.header('Access-Control-Allow-Origin', 'https://rutas-tecsa.up.railway.app'); // URL PÚBLICA REAL DE TU APP EN RAILWAY
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -110,7 +109,6 @@ function authenticateToken(req, res, next) {
     }
 
     if (!token) {
-        // Si no hay token y es una solicitud para una página HTML protegida, redirigir.
         if (req.accepts('html') && req.method === 'GET' && req.originalUrl.startsWith('/routes/')) {
             return res.redirect('https://rutas-tecsa.up.railway.app'); // URL DE TU APP DESPLEGADA
         }
@@ -149,7 +147,6 @@ app.get('/routes/:plantId', authenticateToken, (req, res) => {
     const isAdmin = req.user.is_admin;
 
     if (!isAdmin && requestedPlantId !== userPlantId) {
-        // Si no está autorizado para esta planta, y es una solicitud HTML, redirige.
         if (req.accepts('html')) {
             return res.redirect('https://rutas-tecsa.up.railway.app'); // URL DE TU APP DESPLEGADA
         }
@@ -157,8 +154,8 @@ app.get('/routes/:plantId', authenticateToken, (req, res) => {
     }
 
     const routeFileName = `${requestedPlantId}-routes.html`;
-    // ¡CAMBIO CLAVE! AHORA USA LA RUTA ABSOLUTA DIRECTA EN EL CONTENEDOR
-    const routeFilePath = `/app/public/${routeFileName}`; 
+    // ¡CAMBIO CLAVE! Usar path.resolve(process.cwd(), ...) para la ruta absoluta
+    const routeFilePath = path.resolve(process.cwd(), 'public', routeFileName); 
     
     if (fs.existsSync(routeFilePath)) {
         res.sendFile(routeFilePath);
