@@ -16,16 +16,16 @@ const JWT_SECRET = process.env.JWT_SECRET; // Tu secreto JWT del archivo .env
 // Middleware PRINCIPAL Y ORDEN CRÍTICO
 // =========================================================================
 
-// 0. ¡NUEVA RUTA EXPLÍCITA PARA LA RAÍZ!
-//    Esto asegura que index.html se sirva cuando se accede a la URL principal de la aplicación.
-//    Debe ir ANTES de app.use(express.static) si quieres que maneje el índice directamente.
+// 0. RUTA EXPLÍCITA PARA LA RAÍZ: AHORA USA LA RUTA ABSOLUTA DIRECTAMENTE DENTRO DEL CONTENEDOR
+//    Esto es CRÍTICO para que Express encuentre index.html en Railway cuando el Root Directory es '.'
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile('/app/public/index.html'); 
 });
 
 // 1. **Luego:** Servir archivos estáticos del frontend.
-//    Esto sigue siendo necesario para style.css, script.js, img/, y las otras páginas de rutas HTML.
-app.use(express.static(path.join(__dirname, '../public')));
+//    ¡CAMBIO CLAVE! AHORA USA LA RUTA ABSOLUTA DIRECTA EN EL CONTENEDOR
+//    Esto asegura que style.css, script.js, img/, y las otras páginas de rutas HTML se sirvan.
+app.use(express.static('/app/public')); 
 
 // 2. **Luego:** Parsers para el cuerpo de las solicitudes (JSON).
 app.use(express.json());
@@ -79,7 +79,6 @@ app.post('/api/login', (req, res) => {
             { expiresIn: '1h' }
         );
 
-        // Establecer el token como una cookie HTTP-only y segura
         res.cookie('jwt', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -122,8 +121,9 @@ function authenticateToken(req, res, next) {
         if (err) {
             console.error('Error de verificación de token:', err);
             res.clearCookie('jwt');
-            // Si el token es inválido o expirado, redirigir si es una solicitud HTML.
-            if (req.accepts('html') && req.method === 'GET' && req.originalUrl.startsWith('/routes/')) { return res.redirect('https://rutas-tecsa.up.railway.app'); }
+            if (req.accepts('html') && req.method === 'GET' && req.originalUrl.startsWith('/routes/')) {
+                return res.redirect('https://rutas-tecsa.up.railway.app'); // URL DE TU APP DESPLEGADA
+            }
             return res.status(403).json({ message: 'Token inválido o expirado. Vuelve a iniciar sesión.' });
         }
         req.user = user;
@@ -157,7 +157,8 @@ app.get('/routes/:plantId', authenticateToken, (req, res) => {
     }
 
     const routeFileName = `${requestedPlantId}-routes.html`;
-    const routeFilePath = path.join(__dirname, '../public', routeFileName);
+    // ¡CAMBIO CLAVE! AHORA USA LA RUTA ABSOLUTA DIRECTA EN EL CONTENEDOR
+    const routeFilePath = `/app/public/${routeFileName}`; 
     
     if (fs.existsSync(routeFilePath)) {
         res.sendFile(routeFilePath);
