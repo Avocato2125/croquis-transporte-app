@@ -16,7 +16,15 @@ const JWT_SECRET = process.env.JWT_SECRET; // Tu secreto JWT del archivo .env
 // Middleware PRINCIPAL Y ORDEN CRÍTICO
 // =========================================================================
 
-// 1. **PRIMERO:** Servir archivos estáticos del frontend.
+// 0. ¡NUEVA RUTA EXPLÍCITA PARA LA RAÍZ!
+//    Esto asegura que index.html se sirva cuando se accede a la URL principal de la aplicación.
+//    Debe ir ANTES de app.use(express.static) si quieres que maneje el índice directamente.
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
+// 1. **Luego:** Servir archivos estáticos del frontend.
+//    Esto sigue siendo necesario para style.css, script.js, img/, y las otras páginas de rutas HTML.
 app.use(express.static(path.join(__dirname, '../public')));
 
 // 2. **Luego:** Parsers para el cuerpo de las solicitudes (JSON).
@@ -27,7 +35,7 @@ app.use(cookieParser());
 
 // 4. **Luego:** Configuración manual de CORS.
 app.use((req, res, next) => {
-    // ¡IMPORTANTE! URL PÚBLICA REAL DE TU APP EN RAILWAY
+    // URL PÚBLICA REAL DE TU APP EN RAILWAY
     res.header('Access-Control-Allow-Origin', 'https://rutas-tecsa.up.railway.app');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -71,6 +79,7 @@ app.post('/api/login', (req, res) => {
             { expiresIn: '1h' }
         );
 
+        // Establecer el token como una cookie HTTP-only y segura
         res.cookie('jwt', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -102,8 +111,10 @@ function authenticateToken(req, res, next) {
     }
 
     if (!token) {
-        // URL DE TU APP DESPLEGADA EN RAILWAY
-        if (req.accepts('html') && req.method === 'GET' && req.originalUrl.startsWith('/routes/')) { return res.redirect('https://rutas-tecsa.up.railway.app'); }
+        // Si no hay token y es una solicitud para una página HTML protegida, redirigir.
+        if (req.accepts('html') && req.method === 'GET' && req.originalUrl.startsWith('/routes/')) {
+            return res.redirect('https://rutas-tecsa.up.railway.app'); // URL DE TU APP DESPLEGADA
+        }
         return res.status(401).json({ message: 'Token de autenticación no proporcionado. Acceso denegado.' });
     }
 
@@ -111,7 +122,7 @@ function authenticateToken(req, res, next) {
         if (err) {
             console.error('Error de verificación de token:', err);
             res.clearCookie('jwt');
-            // URL DE TU APP DESPLEGADA EN RAILWAY
+            // Si el token es inválido o expirado, redirigir si es una solicitud HTML.
             if (req.accepts('html') && req.method === 'GET' && req.originalUrl.startsWith('/routes/')) { return res.redirect('https://rutas-tecsa.up.railway.app'); }
             return res.status(403).json({ message: 'Token inválido o expirado. Vuelve a iniciar sesión.' });
         }
@@ -138,8 +149,10 @@ app.get('/routes/:plantId', authenticateToken, (req, res) => {
     const isAdmin = req.user.is_admin;
 
     if (!isAdmin && requestedPlantId !== userPlantId) {
-        // URL DE TU APP DESPLEGADA EN RAILWAY
-        if (req.accepts('html')) { return res.redirect('https://rutas-tecsa.up.railway.app'); }
+        // Si no está autorizado para esta planta, y es una solicitud HTML, redirige.
+        if (req.accepts('html')) {
+            return res.redirect('https://rutas-tecsa.up.railway.app'); // URL DE TU APP DESPLEGADA
+        }
         return res.status(403).send('Acceso denegado. No tienes permisos para ver las rutas de esta planta.');
     }
 
