@@ -1,10 +1,10 @@
 {
-  "name": "server",
+  "name": "croquis-transporte-app", // Puedes cambiar el nombre principal de tu proyecto
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server/app.js", // ¡CAMBIO AQUÍ! apuntas a tu main app dentro de server/
   "scripts": {
-    "start": "node app.js",
+    "start": "node server/app.js", // ¡CAMBIO AQUÍ! llamas a app.js dentro de server/
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
