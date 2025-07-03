@@ -138,7 +138,7 @@ body {
     margin: 0;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     animation: slideInScale 1s ease-out;
-    background: linear-gradient(135deg, #e0e7ff 0%, #ffffff 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -180,7 +180,7 @@ body {
 }
 
 #logoutButton {
-    background: var(--primary-blue);
+    background: var(--primary-blue); /* Nuevo color */
     color: var(--white);
     padding: 0.5rem 1rem;
     border-radius: 8px;
@@ -293,19 +293,19 @@ body {
     transform: translateY(-10px) scale(1.03);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     border-color: rgba(30, 58, 138, 0.6);
-    z-index: 1;
+    z-index: 1; /* Para que la tarjeta quede por encima al hacer hover */
 }
 
 .plant-card-inner {
     position: relative;
-    z-index: 2;
+    z-index: 2; /* Asegura que el contenido esté por encima de los efectos pseudo */
 }
 
 .card-icon-wrapper {
-    width: 130px; /* Aumento del ancho del contenedor */
-    height: 130px; /* Aumento de la altura del contenedor */
+    width: 120px;
+    height: 120px;
     margin: 0 auto 1.5rem;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.9); /* Fondo claro para el icono */
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -313,7 +313,7 @@ body {
     transition: all 0.4s ease;
     border: 2px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+    overflow: hidden; /* Importante para el radio de la imagen */
 }
 
 .plant-card:hover .card-icon-wrapper {
@@ -324,11 +324,11 @@ body {
 }
 
 .plant-card img {
-    width: 90px; /* Aumento del ancho */
-    height: 90px; /* Aumento de la altura */
-    object-fit: contain; /* Mantiene la proporción de la imagen dentro del contenedor */
+    width: 80px; /* Tamaño del logo dentro del wrapper */
+    height: 80px;
+    object-fit: contain;
     transition: transform 0.4s ease;
-    border-radius: 16px; /* Ajuste del radio del borde para que coincida con el wrapper */
+    border-radius: 50%; /* Bordes redondos de la imagen */
 }
 
 .plant-card:hover img {
@@ -345,12 +345,12 @@ body {
 }
 
 .plant-card:hover h3 {
-    color: var(--primary-blue-light);
+    color: var(--primary-blue-light); /* Color al pasar el ratón */
     text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
 }
 
 .footer {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2); /* Fondo semi-transparente */
     backdrop-filter: blur(10px);
     color: rgba(255, 255, 255, 0.8);
     text-align: center;
@@ -358,6 +358,181 @@ body {
     margin-top: 3rem;
     font-size: 0.9rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 450px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    transform: scale(0.8) translateY(30px);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal.show .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--secondary-gray);
+    transition: all 0.3s ease;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--light-gray);
+    border: none;
+}
+
+.close-button:hover {
+    color: #1e3a8a;
+    background: #dbeafe;
+    transform: scale(1.1);
+}
+
+.modal h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--dark-gray);
+    text-align: center;
+}
+
+.modal p {
+    color: var(--secondary-gray);
+    margin-bottom: 2rem;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark-gray);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--white);
+    font-family: inherit;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1);
+    transform: translateY(-2px);
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    display: none; /* Controlado por JS */
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.button {
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+}
+
+.button::before { /* Efecto de onda al click */
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+}
+
+.button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.primary-button {
+    background: #1e3a8a; /* Azul oscuro */
+    color: var(--white);
+}
+
+.primary-button:hover {
+    background: #1e40af;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(30, 58, 138, 0.4);
+}
+
+.secondary-button {
+    background: var(--light-gray);
+    color: var(--dark-gray);
+}
+
+.secondary-button:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* Estilos de las páginas de rutas */
@@ -448,7 +623,7 @@ body {
 .map-container iframe {
     width: 100%;
     max-width: 100%;
-    height: 400px;
+    height: 400px; /* Altura ajustada para mapas */
     border: 1px solid var(--glass-border);
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -503,9 +678,6 @@ body {
     }
     .plant-title {
         font-size: 2rem;
-    }
-    .routes-grid {
-        gap: 1.5rem;
     }
     .map-container {
         padding: 1.5rem;
