@@ -1,10 +1,10 @@
 {
-  "name": "croquis-transporte-app", 
+  "name": "croquis-transporte-app", // Puede ser el nombre de tu proyecto
   "version": "1.0.0",
   "description": "",
-  "main": "server/app.js", 
+  "main": "server/app.js", // ¡Debe apuntar a server/app.js!
   "scripts": {
-    "start": "node server/app.js", 
+    "start": "node server/app.js", // ¡CRÍTICO! Llama a app.js dentro de server/
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -21,6 +21,6 @@
     "jsonwebtoken": "^9.0.2"
   },
   "engines": {          
-    "node": "18.x"      
+    "node": "18.x"      // ¡CRÍTICO! Especifica la versión de Node.js
   }
 }
