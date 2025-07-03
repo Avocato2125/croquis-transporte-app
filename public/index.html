@@ -4,49 +4,590 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Croquis Transporte - Selección de Planta</title>
-    <link rel="stylesheet" href="/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --primary-blue-light: #60a5fa;
+            --secondary-gray: #6b7280;
+            --light-gray: #f9fafb;
+            --dark-gray: #111827;
+            --white: #ffffff;
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #000000 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(30, 58, 138, 0.2);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 120px;
+            height: 120px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            right: 15%;
+            animation-delay: 1s;
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(4) {
+            width: 60px;
+            height: 60px;
+            bottom: 30%;
+            right: 20%;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            padding: 3rem 2rem 1rem;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-50%) scaleX(0); }
+            50% { transform: translateX(-50%) scaleX(1); }
+            100% { transform: translateX(-50%) scaleX(0); }
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin: 0;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: slideInScale 1s ease-out;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes slideInScale {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .plant-selection-section {
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--white);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .plant-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .plant-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .plant-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.3), rgba(255, 255, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .plant-card:hover::before {
+            opacity: 1;
+        }
+
+        .plant-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(30, 58, 138, 0.4) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+            border-radius: 50%;
+        }
+
+        .plant-card:hover::after {
+            width: 400px;
+            height: 400px;
+        }
+
+        .plant-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border-color: rgba(30, 58, 138, 0.6);
+        }
+
+        .plant-card-inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-icon-wrapper {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .plant-card:hover .card-icon-wrapper {
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .plant-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            transition: transform 0.4s ease;
+        }
+
+        .plant-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .plant-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--white);
+            margin: 0;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .plant-card:hover h3 {
+            color: #ffffff;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            transform: scale(0.8) translateY(30px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary-gray);
+            transition: all 0.3s ease;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--light-gray);
+            border: none;
+        }
+
+        .close-button:hover {
+            color: #1e3a8a;
+            background: #dbeafe;
+            transform: scale(1.1);
+        }
+
+        .modal h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-gray);
+            text-align: center;
+        }
+
+        .modal p {
+            color: var(--secondary-gray);
+            margin-bottom: 2rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--white);
+            font-family: inherit;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .button {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .primary-button {
+            background: #1e3a8a;
+            color: var(--white);
+        }
+
+        .primary-button:hover {
+            background: #1e40af;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.4);
+        }
+
+        .secondary-button {
+            background: var(--light-gray);
+            color: var(--dark-gray);
+        }
+
+        .secondary-button:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .fade-in:nth-child(1) { animation-delay: 0.1s; }
+        .fade-in:nth-child(2) { animation-delay: 0.2s; }
+        .fade-in:nth-child(3) { animation-delay: 0.3s; }
+        .fade-in:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .plant-card-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .plant-card {
+                padding: 2rem;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <h1>Croquis Transporte</h1>
-    </header>
+    <div class="bg-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
 
-    <main class="main-content">
-        <section class="plant-selection-section fade-in">
-            <h2 class="section-title">Rutas para...</h2>
-            <p class="section-description">Selecciona la planta para ver sus rutas de transporte.</p>
+    <div class="container">
+        <header class="header">
+            <h1>Croquis Transporte</h1>
+        </header>
 
-            <div class="plant-card-grid">
-                <div class="plant-card fade-in" data-plant="abc-technologies">
-                    <img src="/img/ABC.jpg" alt="Logo ABC-TECHNOLOGIES">
-                    <h3>ABC-TECHNOLOGIES</h3>
-                </div>
-                <div class="plant-card fade-in" data-plant="leoch-battery">
-                    <img src="/img/LEOCH.jpg" alt="Logo LEOCH-BATTERY">
-                    <h3>LEOCH-BATTERY</h3>
-                </div>
-                <div class="plant-card fade-in" data-plant="phillips">
-                    <img src="/img/PHILLIPS.jpg" alt="Logo PHILLIPS">
-                    <h3>PHILLIPS</h3>
-                </div>
-                <div class="plant-card fade-in" data-plant="gerber">
-                    <img src="/img/GERBER.jpg" alt="Logo GERBER">
-                    <h3>GERBER</h3>
-                </div>
-            </div>
-        </section>
-    </main>
+        <main class="main-content">
+            <section class="plant-selection-section fade-in">
+                <h2 class="section-title">Rutas para...</h2>
+                <p class="section-description">Selecciona la planta para ver sus rutas de transporte.</p>
 
-    <footer class="footer">
-        <p>© 2025 Tecsa. Todos los derechos reservados.</p>
-    </footer>
+                <div class="plant-card-grid">
+                    <div class="plant-card fade-in" data-plant="abc-technologies">
+                        <div class="plant-card-inner">
+                            <div class="card-icon-wrapper">
+                                <img src="/img/ABC.jpg" alt="Logo ABC-TECHNOLOGIES">
+                            </div>
+                            <h3>ABC-TECHNOLOGIES</h3>
+                        </div>
+                    </div>
+                    <div class="plant-card fade-in" data-plant="leoch-battery">
+                        <div class="plant-card-inner">
+                            <div class="card-icon-wrapper">
+                                <img src="/img/LEOCH.jpg" alt="Logo LEOCH-BATTERY">
+                            </div>
+                            <h3>LEOCH-BATTERY</h3>
+                        </div>
+                    </div>
+                    <div class="plant-card fade-in" data-plant="phillips">
+                        <div class="plant-card-inner">
+                            <div class="card-icon-wrapper">
+                                <img src="/img/PHILLIPS.jpg" alt="Logo PHILLIPS">
+                            </div>
+                            <h3>PHILLIPS</h3>
+                        </div>
+                    </div>
+                    <div class="plant-card fade-in" data-plant="gerber">
+                        <div class="plant-card-inner">
+                            <div class="card-icon-wrapper">
+                                <img src="/img/GERBER.jpg" alt="Logo GERBER">
+                            </div>
+                            <h3>GERBER</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
 
-    <div id="loginModal" class="modal" style="display:none;">
+        <footer class="footer">
+            <p>© 2025 Tecsa. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span class="close-button">×</span>
+            <button class="close-button">×</button>
             <h2 id="modalPlantTitle">Acceso a Rutas</h2>
             <p id="modalPlantDescription">Por favor, ingresa tu usuario y contraseña para <strong id="modalPlantName"></strong>:</p>
             <div class="input-group">
@@ -65,6 +606,56 @@
         </div>
     </div>
 
-    <script src="/script.js"></script>
+    <script>
+        // Funcionalidad del modal
+        const modal = document.getElementById('loginModal');
+        const plantCards = document.querySelectorAll('.plant-card');
+        const closeButton = document.querySelector('.close-button');
+        const cancelButton = document.getElementById('cancelButton');
+        const modalPlantName = document.getElementById('modalPlantName');
+
+        plantCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const plantName = card.querySelector('h3').textContent;
+                modalPlantName.textContent = plantName;
+                modal.classList.add('show');
+            });
+        });
+
+        closeButton.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        cancelButton.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+
+        // Cerrar con Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                modal.classList.remove('show');
+            }
+        });
+
+        // Efecto parallax en las formas de fondo
+        document.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.shape');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 0.5;
+                const xPos = x * speed * 10;
+                const yPos = y * speed * 10;
+                shape.style.transform = `translate(${xPos}px, ${yPos}px)`;
+            });
+        });
+    </script>
 </body>
 </html>
